@@ -6,13 +6,15 @@ import (
 	"github.com/go-chi/chi/v5"
 	"GoogleProject/nearby"
 	"GoogleProject/auth"
+	"GoogleProject/db"
 
 )
 
 func main() {
 	serv := Init()
+	go db.InitDB()
 	go setupRoutes(serv)
-	go authRoutes()
+	go authRoutes(serv)
 	serv.Post("/api/v1/NearbyPlaces", nearby.HandleNearbyPlaces)
 	fmt.Println("Server is running on http://localhost:8080")
 	http.ListenAndServe(":8080", serv)
